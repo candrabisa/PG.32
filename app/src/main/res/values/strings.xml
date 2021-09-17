@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name">PG.32</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="android_client_google_signin">227898324941-f5ra369ad797qqp8g71tp11nhoaaskrn.apps.googleusercontent.com</string>
+    <string name="web_client_google_signin">227898324941-jsdpcogm6l0f89vfb9s6ii3bt4hqgbtr.apps.googleusercontent.com</string>
+    <string name="digit_idcard">0123456789-</string>
+    <string-array name="jabatan">
+        <item>PIC</item>
+        <item>Supervisor</item>
+    </string-array>
+    <string-array name="department">
+        <item>PG.32 - Yanmar Machining B</item>
+        <item>PG.32 - Yanmar Machining C</item>
+        <item>PG.32 - Yanmar Machining D</item>
+        <item>PG.32 - Yanmar Packing</item>
+        <item>PG.32 - Suzuki 09j</item>
+        <item>PG.32 - Suzuki 22j</item>
+        <item>PG.32 - Lifter Valve</item>
+    </string-array>
+    <string-array name="nomer_mesin">
+        <item>#20</item>
+        <item>#30</item>
+        <item>#40</item>
+        <item>#50</item>
+        <item>#60</item>
+        <item>#70</item>
+        <item>#80</item>
+    </string-array>
+    <string-array name="jenis_tools">
+        <item>New</item>
+        <item>Reghrinding</item>
+    </string-array>
+    <string-array name="history">
+        <item>Data Harian</item>
+        <item>Kanriban Bulanan</item>
+        <item>Kanriban Tahunan</item>
+    </string-array>
+    <string-array name="status_measurement">
+        <item>OK</item>
+        <item>NG</item>
+    </string-array>
+    <string-array name="nama_nama_bulan">
+        <item>Januari</item>
+        <item>Februari</item>
+        <item>Maret</item>
+        <item>April</item>
+        <item>Mei</item>
+        <item>Juni</item>
+        <item>Juli</item>
+        <item>Agustus</item>
+        <item>September</item>
+        <item>Oktober</item>
+        <item>November</item>
+        <item>Desember</item>
+    </string-array>
+    <string name="belum_diisi">Belum diisi</string>
+</resources>

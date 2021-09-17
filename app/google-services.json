@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "227898324941",
+    "project_id": "pg-32-5fe27",
+    "storage_bucket": "pg-32-5fe27.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:227898324941:android:09202ee56143b02d86b684",
+        "android_client_info": {
+          "package_name": "com.otics.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "227898324941-jsdpcogm6l0f89vfb9s6ii3bt4hqgbtr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDs0otyUkEtL-URv7_T8I6oGOzoq2NCeTc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "227898324941-jsdpcogm6l0f89vfb9s6ii3bt4hqgbtr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

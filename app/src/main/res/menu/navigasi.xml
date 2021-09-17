@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navBeranda"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Beranda"/>
+    <item
+        android:id="@+id/navHistory"
+        android:icon="@drawable/ic_baseline_hourglass_empty_24"
+        android:title="History"/>
+    <item
+        android:id="@+id/navAkun"
+        android:icon="@drawable/ic_baseline_person_outline_24"
+        android:title="Account"/>
+</menu>
