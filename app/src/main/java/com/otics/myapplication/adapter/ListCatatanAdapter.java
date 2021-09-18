@@ -1,6 +1,10 @@
 package com.otics.myapplication.adapter;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.otics.myapplication.Pencatatan;
 import com.otics.myapplication.R;
 import com.otics.myapplication.model.ListCatatanModel;
 
@@ -32,7 +37,7 @@ public class ListCatatanAdapter extends RecyclerView.Adapter<ListCatatanAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListCatatanAdapter.MyHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ListCatatanAdapter.MyHolder holder, @SuppressLint("RecyclerView") int position) {
 
         final String tgl_catat =listCatatanModels.get(position).getTgl_pencatatan();
         final String nomc = listCatatanModels.get(position).getNo_mesin();
@@ -55,6 +60,56 @@ public class ListCatatanAdapter extends RecyclerView.Adapter<ListCatatanAdapter.
         holder.tv_jumlahCounter.setText(jumlah_counter);
         holder.tv_alasan.setText(alasan);
         holder.tv_pic.setText(pic);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tekan = position;
+                String pilihan[] = {"Hapus Data", "Edit Data"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("Choose Action");
+                builder.setItems(pilihan, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (i == 0){
+
+                        } else {
+//                            Intent intent = new Intent(context, Pencatatan.class);
+//                            intent.putExtra("tgl_catat", tgl_catat);
+//                            intent.putExtra("nomc", nomc);
+//                            intent.putExtra("jenis_tool", jenis_tools);
+//                            intent.putExtra("waktu_owa", waktu_owa);
+//                            intent.putExtra("status_owa", status_owa);
+//                            intent.putExtra("")
+                        }
+                    }
+                });
+            }
+        });
+
+        if (tekan == position){
+            holder.tv_tglCatat.setBackgroundResource(R.drawable.bg_history_ditekan);
+            holder.tv_nomc.setBackgroundResource(R.drawable.bg_history_ditekan);
+            holder.tv_jenisTools.setBackgroundResource(R.drawable.bg_history_ditekan);
+            holder.tv_waktuOwa.setBackgroundResource(R.drawable.bg_history_ditekan);
+            holder.tv_statusOwa.setBackgroundResource(R.drawable.bg_history_ditekan);
+            holder.tv_waktuHatsu.setBackgroundResource(R.drawable.bg_history_ditekan);
+            holder.tv_statusHatsu.setBackgroundResource(R.drawable.bg_history_ditekan);
+            holder.tv_jumlahCounter.setBackgroundResource(R.drawable.bg_history_ditekan);
+            holder.tv_alasan.setBackgroundResource(R.drawable.bg_history_ditekan);
+            holder.tv_pic.setBackgroundResource(R.drawable.bg_history_ditekan);
+        } else {
+            holder.tv_tglCatat.setBackgroundResource(R.drawable.bg_history_table_content);
+            holder.tv_nomc.setBackgroundResource(R.drawable.bg_history_table_content);
+            holder.tv_jenisTools.setBackgroundResource(R.drawable.bg_history_table_content);
+            holder.tv_waktuOwa.setBackgroundResource(R.drawable.bg_history_table_content);
+            holder.tv_statusOwa.setBackgroundResource(R.drawable.bg_history_table_content);
+            holder.tv_waktuHatsu.setBackgroundResource(R.drawable.bg_history_table_content);
+            holder.tv_statusHatsu.setBackgroundResource(R.drawable.bg_history_table_content);
+            holder.tv_jumlahCounter.setBackgroundResource(R.drawable.bg_history_table_content);
+            holder.tv_alasan.setBackgroundResource(R.drawable.bg_history_table_content);
+            holder.tv_pic.setBackgroundResource(R.drawable.bg_history_table_content);
+        }
 
     }
 
