@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.otics.myapplication.KelolaData;
 import com.otics.myapplication.Pencatatan;
 import com.otics.myapplication.R;
 
@@ -31,6 +32,12 @@ public class FragmentBeranda extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_beranda, container, false);
 
+        view.findViewById(R.id.ll_kelolaDataHome).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), KelolaData.class));
+            }
+        });
         view.findViewById(R.id.iv_safety3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

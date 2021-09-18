@@ -1,50 +1,38 @@
-package com.otics.myapplication.fragment;
+package com.otics.myapplication;
 
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Environment;
-import android.os.FileUtils;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.NumberPicker;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.datepicker.MaterialDatePicker;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,11 +41,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.otics.myapplication.MainActivity;
-import com.otics.myapplication.MonthYearPickerDialog;
-import com.otics.myapplication.R;
 import com.otics.myapplication.adapter.ListCatatanAdapter;
 import com.otics.myapplication.model.ListCatatanModel;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
@@ -70,7 +54,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.CompletableFuture;
 
 import jxl.Workbook;
 import jxl.WorkbookSettings;
@@ -80,7 +63,7 @@ import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
 
-public class FragmentHistory extends Fragment implements AdapterView.OnItemSelectedListener {
+public class KelolaData extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     EditText et_cariPakeTanggal, et_cariPakeBulan, et_cariPakeTahun;
     RecyclerView rv_history;
@@ -100,6 +83,7 @@ public class FragmentHistory extends Fragment implements AdapterView.OnItemSelec
 
     ProgressDialog progressDialog;
     AlertDialog.Builder builder;
+    View parentLayout;
     static final int REQUEST_CODE = 100;
 
     String nama;
@@ -108,41 +92,35 @@ public class FragmentHistory extends Fragment implements AdapterView.OnItemSelec
     String tahun = new SimpleDateFormat("yyyy", Locale.getDefault()).format(new Date());
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_history, container, false);
+        setContentView(R.layout.activity_kelola_data);
 
         loadDataPencatatan();
 
-        constraint_history = view.findViewById(R.id.constraint_history);
-        rl_filterTglHistory = view.findViewById(R.id.rl_filterTglHistory);
-        constraint_filterBulan = view.findViewById(R.id.constraint_filterBulan);
-        constraint_filterTahun = view.findViewById(R.id.constraint_filterTahun);
+        constraint_history = findViewById(R.id.constraint_history);
+        rl_filterTglHistory = findViewById(R.id.rl_filterTglHistory);
+        constraint_filterBulan = findViewById(R.id.constraint_filterBulan);
+        constraint_filterTahun = findViewById(R.id.constraint_filterTahun);
         rl_filterTglHistory.setVisibility(View.GONE);
         constraint_filterBulan.setVisibility(View.GONE);
         constraint_filterTahun.setVisibility(View.GONE);
 
-        btn_cetakKanriban = view.findViewById(R.id.btn_cetakKanriban);
-        btn_bagikanKanriban = view.findViewById(R.id.btn_bagikanKanriban);
+        btn_cetakKanriban = findViewById(R.id.btn_cetakKanriban);
+        btn_bagikanKanriban = findViewById(R.id.btn_bagikanKanriban);
 
-        sp_historyCatatan = view.findViewById(R.id.sp_historyCatatan);
+        sp_historyCatatan = findViewById(R.id.sp_historyCatatan);
         sp_historyCatatan.setOnItemSelectedListener(this);
+        parentLayout = findViewById(R.id.content);
 
-        et_cariPakeTanggal = view.findViewById(R.id.et_cariPakeTanggal);
-        et_cariPakeBulan = view.findViewById(R.id.et_cariPakeBulan);
-        et_cariPakeTahun = view.findViewById(R.id.et_cariPakeTahun);
+        et_cariPakeTanggal = findViewById(R.id.et_cariPakeTanggal);
+        et_cariPakeBulan = findViewById(R.id.et_cariPakeBulan);
+        et_cariPakeTahun = findViewById(R.id.et_cariPakeTahun);
 
-        rv_history = view.findViewById(R.id.rv_history);
-        rv_history.setLayoutManager(new LinearLayoutManager(getContext()));
+        rv_history = findViewById(R.id.rv_history);
+        rv_history.setLayoutManager(new LinearLayoutManager(this));
 
-        builder = new AlertDialog.Builder(getContext());
+        builder = new AlertDialog.Builder(this);
         builder.setTitle("Perhatian!");
         builder.setMessage("Anda belum melengkapi data diri profil, tidak dapat melihat history data pencatatan");
         builder.setCancelable(false);
@@ -213,7 +191,7 @@ public class FragmentHistory extends Fragment implements AdapterView.OnItemSelec
         et_cariPakeTahun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
+                builder = new AlertDialog.Builder(KelolaData.this, R.style.AlertDialogStyle);
                 View layout_tahun = getLayoutInflater().inflate(R.layout.month_year_picker_dialog, null);
                 NumberPicker yearPicker = layout_tahun.findViewById(R.id.picker_year);
 
@@ -246,7 +224,7 @@ public class FragmentHistory extends Fragment implements AdapterView.OnItemSelec
         et_cariPakeBulan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogStyle);
+                builder = new AlertDialog.Builder(KelolaData.this, R.style.AlertDialogStyle);
                 View layout_bulan = getLayoutInflater().inflate(R.layout.month_year_picker_dialog, null);
                 TextView tv_monthYearDialog = layout_bulan.findViewById(R.id.tv_monthYearDialog);
                 NumberPicker monthPicker = layout_bulan.findViewById(R.id.picker_month);
@@ -300,15 +278,71 @@ public class FragmentHistory extends Fragment implements AdapterView.OnItemSelec
                     }
                 };
 
-                new DatePickerDialog(getContext(), date,
+                new DatePickerDialog(KelolaData.this, date,
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH))
                         .show();
             }
         });
+    }
 
-        return view;
+    public void filterDataHistoryPerhari(String filter){
+        dRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                listCatatanModels.clear();
+                for (DataSnapshot ds : snapshot.getChildren()){
+                    ListCatatanModel model =ds.getValue(ListCatatanModel.class);
+                    if (model.getTgl_pencatatan().toLowerCase().contains(filter.toLowerCase())){
+                        listCatatanModels.add(model);
+                    }
+
+                }
+                adapter = new ListCatatanAdapter(KelolaData.this, listCatatanModels);
+                if (listCatatanModels.isEmpty()){
+                    Snackbar.make(parentLayout, "Data History Kosong", BaseTransientBottomBar.LENGTH_SHORT).show();
+                    constraint_history.setVisibility(View.GONE);
+                } else {
+                    constraint_history.setVisibility(View.VISIBLE);
+                    rv_history.setAdapter(adapter);
+                }
+                progressDialog.dismiss();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void loadDataPencatatan(){
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(true);
+        progressDialog.show();
+
+        dRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                listCatatanModels.clear();
+                for (DataSnapshot ds : snapshot.getChildren()){
+                    ListCatatanModel model = ds.getValue(ListCatatanModel.class);
+                    listCatatanModels.add(model);
+
+                    adapter = new ListCatatanAdapter(KelolaData.this, listCatatanModels);
+                    rv_history.setAdapter(adapter);
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void cetakLaporan(){
@@ -365,7 +399,7 @@ public class FragmentHistory extends Fragment implements AdapterView.OnItemSelec
             e.printStackTrace();
         }
 
-        Uri uri = FileProvider.getUriForFile(getContext(), getContext().getApplicationContext()
+        Uri uri = FileProvider.getUriForFile(KelolaData.this, KelolaData.this.getApplicationContext()
                 .getPackageName() + ".provider", file);
         Intent bukaExcel = new Intent(Intent.ACTION_VIEW);
         bukaExcel.setData(uri);
@@ -428,71 +462,13 @@ public class FragmentHistory extends Fragment implements AdapterView.OnItemSelec
         } catch (WriteException e) {
             e.printStackTrace();
         }
-        Uri uri = FileProvider.getUriForFile(getContext(), getContext().getApplicationContext()
+        Uri uri = FileProvider.getUriForFile(KelolaData.this, KelolaData.this.getApplicationContext()
                 .getPackageName() + ".provider", file);
         Intent berbagiLaporan =new Intent(Intent.ACTION_SEND);
         berbagiLaporan.setType("text/plain");
         berbagiLaporan.putExtra(Intent.EXTRA_STREAM, uri);
         berbagiLaporan.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(Intent.createChooser(berbagiLaporan, "Berbagai Laporan Pencatatan Dengan"));
-    }
-
-    public void filterDataHistoryPerhari(String filter){
-        dRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listCatatanModels.clear();
-                for (DataSnapshot ds : snapshot.getChildren()){
-                    ListCatatanModel model =ds.getValue(ListCatatanModel.class);
-                    if (model.getTgl_pencatatan().toLowerCase().contains(filter.toLowerCase())){
-                        listCatatanModels.add(model);
-                    }
-
-                }
-                adapter = new ListCatatanAdapter(getContext(), listCatatanModels);
-                if (listCatatanModels.isEmpty()){
-                    Snackbar.make(getView(), "Data History Kosong", BaseTransientBottomBar.LENGTH_SHORT).show();
-                    constraint_history.setVisibility(View.GONE);
-                } else {
-                    constraint_history.setVisibility(View.VISIBLE);
-                    rv_history.setAdapter(adapter);
-                }
-                progressDialog.dismiss();
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    public void loadDataPencatatan(){
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Loading...");
-        progressDialog.setCancelable(true);
-        progressDialog.show();
-
-        dRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listCatatanModels.clear();
-                for (DataSnapshot ds : snapshot.getChildren()){
-                    ListCatatanModel model = ds.getValue(ListCatatanModel.class);
-                    listCatatanModels.add(model);
-
-                    adapter = new ListCatatanAdapter(getContext(), listCatatanModels);
-                    rv_history.setAdapter(adapter);
-                    progressDialog.dismiss();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
 
     @Override
@@ -577,5 +553,53 @@ public class FragmentHistory extends Fragment implements AdapterView.OnItemSelec
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
         loadDataPencatatan();
+    }
+
+    private void checkPermission(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) +
+                ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) +
+                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) !=
+                PackageManager.PERMISSION_GRANTED){
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE) ||
+                    ActivityCompat.shouldShowRequestPermissionRationale(this
+                            , Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
+                    ActivityCompat.shouldShowRequestPermissionRationale(this
+                            , Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Meminta izin membaca perangkat");
+                builder.setMessage("Membaca dan menulis pada penyimpanan, menggunakan kamera");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ActivityCompat.requestPermissions(KelolaData.this, new String[]{
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.CAMERA
+                        }, REQUEST_CODE);
+                    }
+                });
+                builder.setNegativeButton("Batal",null);
+                builder.create().show();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.CAMERA
+                }, REQUEST_CODE);
+            }
+        } else {
+            Snackbar.make(parentLayout, "Permintaan izin telah disetujui", BaseTransientBottomBar.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode){
+            case REQUEST_CODE:
+                Snackbar.make(parentLayout, "Permintaan izin disetujui", BaseTransientBottomBar.LENGTH_SHORT).show();
+        }
     }
 }
