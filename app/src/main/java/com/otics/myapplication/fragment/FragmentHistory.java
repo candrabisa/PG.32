@@ -8,7 +8,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Environment;
+import android.os.FileUtils;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextUtils;
@@ -29,6 +32,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -191,69 +195,17 @@ public class FragmentHistory extends Fragment implements AdapterView.OnItemSelec
             }
         });
 
+        btn_cetakKanriban.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cetakLaporan();
+            }
+        });
+
         btn_bagikanKanriban.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String namaLaporan ="Laporan Kanriban-"+tanggal+"-"+nama+".xls";
-                File fileXls = Environment.getExternalStorageDirectory();
-                File directory =new File(fileXls.getAbsolutePath() + "/Laporan PG.32 PT.Otics Indonesia");
-                directory.mkdirs();
-                File file = new File(directory, namaLaporan);
-
-                WorkbookSettings wbSettings =new WorkbookSettings();
-                wbSettings.setLocale(new Locale("id", "ID"));
-                WritableWorkbook workbook;
-
-                try {
-                    workbook = Workbook.createWorkbook(file, wbSettings);
-                    WritableSheet sheet =workbook.createSheet("Sheet1", 0);
-
-                    sheet.addCell(new Label(0, 0, "Tanggal"));
-                    sheet.addCell(new Label(1,0,"No Mesin"));
-                    sheet.addCell(new Label(2,0,"Jenis Tools"));
-                    sheet.addCell(new Label(3,0,"Waktu Owarimono"));
-                    sheet.addCell(new Label(4,0,"OK/NG"));
-                    sheet.addCell(new Label(5,0,"Waktu Hatsumono"));
-                    sheet.addCell(new Label(6,0,"OK/NG"));
-                    sheet.addCell(new Label(7,0,"Jumlah Counter"));
-                    sheet.addCell(new Label(8,0,"Alasan"));
-                    sheet.addCell(new Label(9,0,"PIC"));
-
-                    for (int i = 0; i<listCatatanModels.size(); i++){
-                        sheet.addCell(new Label(0,i+1, listCatatanModels.get(i).getTgl_pencatatan()));
-                        sheet.addCell(new Label(1,i+1,listCatatanModels.get(i).getNo_mesin()));
-                        sheet.addCell(new Label(2,i+1, listCatatanModels.get(i).getJenis_tools()));
-                        sheet.addCell(new Label(3,i+1,listCatatanModels.get(i).getWaktu_owa()));
-                        sheet.addCell(new Label(4,i+1, listCatatanModels.get(i).getStatus_owa()));
-                        sheet.addCell(new Label(5,i+1, listCatatanModels.get(i).getWaktu_hatsu()));
-                        sheet.addCell(new Label(6,i+1, listCatatanModels.get(i).getStatus_hatsu()));
-                        sheet.addCell(new Label(7,i+1, listCatatanModels.get(i).getJumlah_count()));
-                        sheet.addCell(new Label(8,i+1, listCatatanModels.get(i).getAlasan_pencatatan()));
-                        sheet.addCell(new Label(9,i+1, listCatatanModels.get(i).getPic()));
-                    }
-                    workbook.write();
-
-                    try {
-                        workbook.close();
-                    } catch (WriteException e){
-                        e.printStackTrace();
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (RowsExceededException e) {
-                    e.printStackTrace();
-                } catch (WriteException e) {
-                    e.printStackTrace();
-                }
-
-                Uri uri = FileProvider.getUriForFile(getContext(), getContext().getApplicationContext()
-                            .getPackageName() + ".provider", file);
-                Intent berbagiLaporan =new Intent(Intent.ACTION_SEND);
-                berbagiLaporan.setType("text/plain");
-                berbagiLaporan.putExtra(Intent.EXTRA_STREAM, uri);
-                berbagiLaporan.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivity(Intent.createChooser(berbagiLaporan, "Berbagai Laporan Pencatatan Dengan"));
+                recyclerToExcelReport();
 
             }
         });
@@ -357,6 +309,132 @@ public class FragmentHistory extends Fragment implements AdapterView.OnItemSelec
         });
 
         return view;
+    }
+
+    private void cetakLaporan(){
+        final String namaLaporan ="Laporan Kanriban-"+tanggal+"-"+nama+".xls";
+        File fileXls = Environment.getExternalStorageDirectory();
+        File directory =new File(fileXls.getAbsolutePath() + "/Laporan PG.32 PT.Otics Indonesia");
+        directory.mkdirs();
+        File file = new File(directory, namaLaporan);
+
+        WorkbookSettings wbSettings =new WorkbookSettings();
+        wbSettings.setLocale(new Locale("id", "ID"));
+        WritableWorkbook workbook;
+
+        try {
+            workbook = Workbook.createWorkbook(file, wbSettings);
+            WritableSheet sheet =workbook.createSheet("Sheet1", 0);
+
+            sheet.addCell(new Label(0, 0, "Tanggal"));
+            sheet.addCell(new Label(1,0,"No Mesin"));
+            sheet.addCell(new Label(2,0,"Jenis Tools"));
+            sheet.addCell(new Label(3,0,"Waktu Owarimono"));
+            sheet.addCell(new Label(4,0,"OK/NG"));
+            sheet.addCell(new Label(5,0,"Waktu Hatsumono"));
+            sheet.addCell(new Label(6,0,"OK/NG"));
+            sheet.addCell(new Label(7,0,"Jumlah Counter"));
+            sheet.addCell(new Label(8,0,"Alasan"));
+            sheet.addCell(new Label(9,0,"PIC"));
+
+            for (int i = 0; i<listCatatanModels.size(); i++){
+                sheet.addCell(new Label(0,i+1, listCatatanModels.get(i).getTgl_pencatatan()));
+                sheet.addCell(new Label(1,i+1,listCatatanModels.get(i).getNo_mesin()));
+                sheet.addCell(new Label(2,i+1, listCatatanModels.get(i).getJenis_tools()));
+                sheet.addCell(new Label(3,i+1,listCatatanModels.get(i).getWaktu_owa()));
+                sheet.addCell(new Label(4,i+1, listCatatanModels.get(i).getStatus_owa()));
+                sheet.addCell(new Label(5,i+1, listCatatanModels.get(i).getWaktu_hatsu()));
+                sheet.addCell(new Label(6,i+1, listCatatanModels.get(i).getStatus_hatsu()));
+                sheet.addCell(new Label(7,i+1, listCatatanModels.get(i).getJumlah_count()));
+                sheet.addCell(new Label(8,i+1, listCatatanModels.get(i).getAlasan_pencatatan()));
+                sheet.addCell(new Label(9,i+1, listCatatanModels.get(i).getPic()));
+            }
+            workbook.write();
+
+            try {
+                workbook.close();
+            } catch (WriteException e){
+                e.printStackTrace();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (RowsExceededException e) {
+            e.printStackTrace();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+
+        Uri uri = FileProvider.getUriForFile(getContext(), getContext().getApplicationContext()
+                .getPackageName() + ".provider", file);
+        Intent bukaExcel = new Intent(Intent.ACTION_VIEW);
+        bukaExcel.setData(uri);
+        bukaExcel.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(bukaExcel);
+
+    }
+
+
+    private void recyclerToExcelReport(){
+        final String namaLaporan ="Laporan Kanriban-"+tanggal+"-"+nama+".xls";
+        File fileXls = Environment.getExternalStorageDirectory();
+        File directory =new File(fileXls.getAbsolutePath() + "/Laporan PG.32 PT.Otics Indonesia");
+        directory.mkdirs();
+        File file = new File(directory, namaLaporan);
+
+        WorkbookSettings wbSettings =new WorkbookSettings();
+        wbSettings.setLocale(new Locale("id", "ID"));
+        WritableWorkbook workbook;
+
+        try {
+            workbook = Workbook.createWorkbook(file, wbSettings);
+            WritableSheet sheet =workbook.createSheet("Sheet1", 0);
+
+            sheet.addCell(new Label(0, 0, "Tanggal"));
+            sheet.addCell(new Label(1,0,"No Mesin"));
+            sheet.addCell(new Label(2,0,"Jenis Tools"));
+            sheet.addCell(new Label(3,0,"Waktu Owarimono"));
+            sheet.addCell(new Label(4,0,"OK/NG"));
+            sheet.addCell(new Label(5,0,"Waktu Hatsumono"));
+            sheet.addCell(new Label(6,0,"OK/NG"));
+            sheet.addCell(new Label(7,0,"Jumlah Counter"));
+            sheet.addCell(new Label(8,0,"Alasan"));
+            sheet.addCell(new Label(9,0,"PIC"));
+
+            for (int i = 0; i<listCatatanModels.size(); i++){
+                sheet.addCell(new Label(0,i+1, listCatatanModels.get(i).getTgl_pencatatan()));
+                sheet.addCell(new Label(1,i+1,listCatatanModels.get(i).getNo_mesin()));
+                sheet.addCell(new Label(2,i+1, listCatatanModels.get(i).getJenis_tools()));
+                sheet.addCell(new Label(3,i+1,listCatatanModels.get(i).getWaktu_owa()));
+                sheet.addCell(new Label(4,i+1, listCatatanModels.get(i).getStatus_owa()));
+                sheet.addCell(new Label(5,i+1, listCatatanModels.get(i).getWaktu_hatsu()));
+                sheet.addCell(new Label(6,i+1, listCatatanModels.get(i).getStatus_hatsu()));
+                sheet.addCell(new Label(7,i+1, listCatatanModels.get(i).getJumlah_count()));
+                sheet.addCell(new Label(8,i+1, listCatatanModels.get(i).getAlasan_pencatatan()));
+                sheet.addCell(new Label(9,i+1, listCatatanModels.get(i).getPic()));
+            }
+            workbook.write();
+
+            try {
+                workbook.close();
+            } catch (WriteException e){
+                e.printStackTrace();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (RowsExceededException e) {
+            e.printStackTrace();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+        Uri uri = FileProvider.getUriForFile(getContext(), getContext().getApplicationContext()
+                .getPackageName() + ".provider", file);
+        Intent berbagiLaporan =new Intent(Intent.ACTION_SEND);
+        berbagiLaporan.setType("text/plain");
+        berbagiLaporan.putExtra(Intent.EXTRA_STREAM, uri);
+        berbagiLaporan.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(Intent.createChooser(berbagiLaporan, "Berbagai Laporan Pencatatan Dengan"));
     }
 
     public void filterDataHistoryPerhari(String filter){
@@ -499,58 +577,5 @@ public class FragmentHistory extends Fragment implements AdapterView.OnItemSelec
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
         loadDataPencatatan();
-    }
-
-    private void checkPermission(){
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) +
-                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) +
-                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) !=
-                PackageManager.PERMISSION_GRANTED){
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.READ_EXTERNAL_STORAGE) ||
-                    ActivityCompat.shouldShowRequestPermissionRationale(getActivity()
-                            , Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
-                    ActivityCompat.shouldShowRequestPermissionRationale(getActivity()
-                            , Manifest.permission.WRITE_EXTERNAL_STORAGE)){
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Meminta izin membaca perangkat");
-                builder.setMessage("Membaca dan menulis pada penyimpanan, menggunakan kamera");
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        ActivityCompat.requestPermissions(getActivity(), new String[]{
-                                Manifest.permission.READ_EXTERNAL_STORAGE,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                Manifest.permission.CAMERA
-                        }, REQUEST_CODE);
-                    }
-                });
-                builder.setNegativeButton("Batal",null);
-                builder.create().show();
-            } else {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.CAMERA
-                }, REQUEST_CODE);
-            }
-        } else {
-            Snackbar.make(getView(), "Permintaan izin telah disetujui", BaseTransientBottomBar.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        switch (requestCode){
-            case REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] + grantResults[1] + grantResults[2]
-                        == PackageManager.PERMISSION_GRANTED){
-                    Snackbar.make(getView(), "Permintaan izin disetujui", BaseTransientBottomBar.LENGTH_SHORT).show();
-                } else {
-                    Snackbar.make(getView(), "Permintaan izin disetujui", BaseTransientBottomBar.LENGTH_SHORT).show();
-                }
-        }
     }
 }
