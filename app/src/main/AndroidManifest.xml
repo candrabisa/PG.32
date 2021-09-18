@@ -18,6 +18,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PG32">
         <activity
+            android:name=".KelolaData"
+            android:exported="true"
+            android:screenOrientation="nosensor"
+            />
+        <activity
             android:name=".Pencatatan"
             android:exported="true"
             android:screenOrientation="nosensor"
