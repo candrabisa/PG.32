@@ -10,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.otics.myapplication.JadwalSholat;
 import com.otics.myapplication.KelolaData;
 import com.otics.myapplication.Pencatatan;
 import com.otics.myapplication.R;
@@ -20,6 +22,7 @@ public class FragmentBeranda extends Fragment {
 
 
     AlertDialog.Builder builder;
+    TextView tv_waktuNow;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,16 @@ public class FragmentBeranda extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_beranda, container, false);
+
+        tv_waktuNow = view.findViewById(R.id.tv_waktuNow);
+
+        tv_waktuNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), JadwalSholat.class));
+            }
+        });
+
 
         view.findViewById(R.id.ll_kelolaDataHome).setOnClickListener(new View.OnClickListener() {
             @Override
