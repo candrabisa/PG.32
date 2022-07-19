@@ -10,10 +10,12 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -27,6 +29,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.otics.myapplication.adapter.ListCatatanAdapter;
+import com.otics.myapplication.model.ListCatatanModel;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -54,6 +58,7 @@ public class Pencatatan extends AppCompatActivity {
     ProgressDialog progressDialog;
 
     String nama_pic;
+    String id_transaksi;
     int transaksi = new Random().nextInt();
 
     @Override
@@ -72,6 +77,81 @@ public class Pencatatan extends AppCompatActivity {
         sp_statusHatsu = findViewById(R.id.sp_statusHatsu);
         btn_simpanData = findViewById(R.id.btn_inputDataPencatatan);
 
+        try {
+            Bundle bundle = getIntent().getExtras();
+            if (bundle != null){
+                id_transaksi = bundle.getString("id_transaksi");
+                final String tgl_catat = bundle.getString("tgl_catat");
+                final String nomc = bundle.getString("nomc");
+                final String jenis_tools = bundle.getString("jenis_tools");
+                final String waktu_owa = bundle.getString("waktu_owa");
+                final String status_owa = bundle.getString("status_owa");
+                final String waktu_hatsu = bundle.getString("waktu_hatsu");
+                final String status_hatsu = bundle.getString("status_hatsu");
+                final String jumlah_count = bundle.getString("jumlah_count");
+                final String alasan = bundle.getString("alasan");
+                final String pic = bundle.getString("pic");
+
+                et_ambilTglPencatatan.setText(tgl_catat);
+                et_ambilTglPencatatan.setEnabled(false);
+                et_waktuOwaPencatatan.setText(waktu_owa);
+                et_waktuHatsuPencatatan.setText(waktu_hatsu);
+                et_jumlahCountPencatatan.setText(jumlah_count);
+                et_alasanPencatatan.setText(alasan);
+
+                switch (nomc){
+                    case "#20" :
+                        sp_nomc.setSelection(0);
+                        break;
+                    case "#30" :
+                        sp_nomc.setSelection(1);
+                        break;
+                    case "#40" :
+                        sp_nomc.setSelection(2);
+                        break;
+                    case "#50" :
+                        sp_nomc.setSelection(3);
+                        break;
+                    case "#60" :
+                        sp_nomc.setSelection(4);
+                        break;
+                    case "70" :
+                        sp_nomc.setSelection(5);
+                        break;
+                    case "#80" :
+                        sp_nomc.setSelection(6);
+                    default:
+                        break;
+                }
+
+                if (status_owa.equals("OK")){
+                    sp_statusOwa.setSelection(0);
+                } else {
+                    sp_statusOwa.setSelection(1);
+                }
+
+                if (jenis_tools.equals("New")){
+                    sp_pilihJenisTool.setSelection(0);
+                } else {
+                    sp_pilihJenisTool.setSelection(1);
+                }
+                if (status_hatsu.equals("OK")){
+                    sp_statusHatsu.setSelection(0);
+                } else {
+                    sp_statusHatsu.setSelection(1);
+                }
+            } else {
+                et_ambilTglPencatatan.setText("");
+                et_waktuOwaPencatatan.setText("");
+                et_waktuHatsuPencatatan.setText("");
+                et_jumlahCountPencatatan.setText("");
+                et_alasanPencatatan.setText("");
+            }
+
+        } catch (Exception e){
+            Toast.makeText(Pencatatan.this, "Kesalahan", Toast.LENGTH_SHORT).show();
+        }
+
         progressDialog = new ProgressDialog(Pencatatan.this);
         progressDialog.setMessage("Menyimpan data");
         progressDialog.setCancelable(false);
@@ -82,6 +162,26 @@ public class Pencatatan extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds : snapshot.getChildren()){
                     nama_pic = "" + ds.child("nama_lengkap").getValue();
+                    final String idcard = "" + ds.child("idcard").getValue();
+                    final String jabatan = "" + ds.child("jabatan").getValue();
+                    final String tgl_join = ""+ds.child("tgl_join_pt").getValue();
+                    final String department = ""+ds.child("department").getValue();
+                    final String alamat = ""+ds.child("alamat").getValue();
+                    final String nohp = ""+ds.child("nohp").getValue();
+
+                    if (idcard.isEmpty() && jabatan.isEmpty() && tgl_join.isEmpty() && department.isEmpty() && alamat.isEmpty() && nohp.isEmpty()){
+                        AlertDialog.Builder alert = new AlertDialog.Builder(Pencatatan.this);
+                        alert.setTitle("Perhatian!!");
+                        alert.setMessage("Anda harus melengkapi data pada account untuk melakukan pencatatan data");
+                        alert.setNegativeButton("Oke", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                                finish();
+                            }
+                        });
+                        alert.create().show();
+                    }
                 }
             }
 
@@ -127,38 +227,77 @@ public class Pencatatan extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             progressDialog.show();
-                            dRef.child(tanggal_catatan+"-"+transaksi).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    snapshot.getRef().child("tgl_pencatatan").setValue(tanggal_catatan);
-                                    snapshot.getRef().child("waktu_owa").setValue(waktu_owa);
-                                    snapshot.getRef().child("waktu_hatsu").setValue(waktu_hatsu);
-                                    snapshot.getRef().child("jumlah_count").setValue(jumlah_count);
-                                    snapshot.getRef().child("alasan_pencatatan").setValue(alasan);
-                                    snapshot.getRef().child("no_mesin").setValue(nomc);
-                                    snapshot.getRef().child("jenis_tools").setValue(jenis_tools);
-                                    snapshot.getRef().child("status_owa").setValue(status_owa);
-                                    snapshot.getRef().child("status_hatsu").setValue(status_hatsu);
-                                    snapshot.getRef().child("pic").setValue(nama_pic);
+                            if (id_transaksi == null){
+                                dRef.child(tanggal_catatan+"-"+transaksi).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        snapshot.getRef().child("id_transaksi").setValue(tanggal_catatan+"-"+transaksi);
+                                        snapshot.getRef().child("tgl_pencatatan").setValue(tanggal_catatan);
+                                        snapshot.getRef().child("waktu_owa").setValue(waktu_owa);
+                                        snapshot.getRef().child("waktu_hatsu").setValue(waktu_hatsu);
+                                        snapshot.getRef().child("jumlah_count").setValue(jumlah_count);
+                                        snapshot.getRef().child("alasan_pencatatan").setValue(alasan);
+                                        snapshot.getRef().child("no_mesin").setValue(nomc);
+                                        snapshot.getRef().child("jenis_tools").setValue(jenis_tools);
+                                        snapshot.getRef().child("status_owa").setValue(status_owa);
+                                        snapshot.getRef().child("status_hatsu").setValue(status_hatsu);
+                                        snapshot.getRef().child("pic").setValue(nama_pic);
 
-                                    et_ambilTglPencatatan.setText("");
-                                    et_waktuOwaPencatatan.setText("");
-                                    et_waktuHatsuPencatatan.setText("");
-                                    et_jumlahCountPencatatan.setText("");
-                                    et_alasanPencatatan.setText("");
-                                    transaksi = new Random().nextInt();
+                                        et_ambilTglPencatatan.setText("");
+                                        et_waktuOwaPencatatan.setText("");
+                                        et_waktuHatsuPencatatan.setText("");
+                                        et_jumlahCountPencatatan.setText("");
+                                        et_alasanPencatatan.setText("");
+                                        transaksi = new Random().nextInt();
 
-                                    Snackbar.make(view, "Data berhasil disimpan", BaseTransientBottomBar.LENGTH_SHORT).show();
-                                    progressDialog.dismiss();
-                                }
+                                        Snackbar.make(view, "Data berhasil disimpan", BaseTransientBottomBar.LENGTH_SHORT).show();
+                                        progressDialog.dismiss();
+                                    }
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-                                    Snackbar.make(view, "Gagal menyimpan karena "+error.getMessage()
-                                            ,BaseTransientBottomBar.LENGTH_SHORT).show();
-                                    progressDialog.dismiss();
-                                }
-                            });
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+                                        Snackbar.make(view, "Gagal menyimpan karena "+error.getMessage()
+                                                ,BaseTransientBottomBar.LENGTH_SHORT).show();
+                                        progressDialog.dismiss();
+                                    }
+                                });
+                            } else {
+                                dRef.child(id_transaksi).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        snapshot.getRef().child("id_transaksi").setValue(id_transaksi);
+                                        snapshot.getRef().child("tgl_pencatatan").setValue(tanggal_catatan);
+                                        snapshot.getRef().child("waktu_owa").setValue(waktu_owa);
+                                        snapshot.getRef().child("waktu_hatsu").setValue(waktu_hatsu);
+                                        snapshot.getRef().child("jumlah_count").setValue(jumlah_count);
+                                        snapshot.getRef().child("alasan_pencatatan").setValue(alasan);
+                                        snapshot.getRef().child("no_mesin").setValue(nomc);
+                                        snapshot.getRef().child("jenis_tools").setValue(jenis_tools);
+                                        snapshot.getRef().child("status_owa").setValue(status_owa);
+                                        snapshot.getRef().child("status_hatsu").setValue(status_hatsu);
+                                        snapshot.getRef().child("pic").setValue(nama_pic);
+
+                                        et_ambilTglPencatatan.setText("");
+                                        et_waktuOwaPencatatan.setText("");
+                                        et_waktuHatsuPencatatan.setText("");
+                                        et_jumlahCountPencatatan.setText("");
+                                        et_alasanPencatatan.setText("");
+                                        transaksi = new Random().nextInt();
+
+                                        Snackbar.make(view, "Data berhasil disimpan", BaseTransientBottomBar.LENGTH_SHORT).show();
+                                        progressDialog.dismiss();
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+                                        Snackbar.make(view, "Gagal menyimpan karena "+error.getMessage()
+                                                ,BaseTransientBottomBar.LENGTH_SHORT).show();
+                                        progressDialog.dismiss();
+                                    }
+                                });
+
+                            }
+
 
                         }
                     });

@@ -81,26 +81,26 @@ public class SettingAccount extends AppCompatActivity {
                         final String password1 = et_changePw1.getText().toString();
                         final String password2 = et_changePw2.getText().toString();
 
-                        if (password1.isEmpty()){
+                        if (password1.isEmpty()) {
                             Snackbar.make(view, "Password baru tidak boleh kosong", BaseTransientBottomBar.LENGTH_SHORT).show();
-                        } else if (password2.isEmpty()){
+                        } else if (password2.isEmpty()) {
                             Snackbar.make(view, "Ulangi password tidak kosong", BaseTransientBottomBar.LENGTH_SHORT).show();
-                        } else if (!password2.equals(password1)){
+                        } else if (!password2.equals(password1)) {
                             Snackbar.make(view, "Password tidak sama", BaseTransientBottomBar.LENGTH_SHORT).show();
-                        } else if (password2.length()<6) {
+                        } else if (password2.length() < 6) {
                             Snackbar.make(view, "Password minimal 6 karakter", BaseTransientBottomBar.LENGTH_SHORT).show();
-                        } else{
+                        } else {
                             fUser.updatePassword(password2).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()){
+                                    if (task.isSuccessful()) {
                                         Snackbar.make(view, "Password berhasil diubah", BaseTransientBottomBar.LENGTH_SHORT).show();
                                     } else {
                                         AuthCredential credential = EmailAuthProvider.getCredential(fUser.getEmail(), password2);
                                         fUser.linkWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                             @Override
                                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                                if (task.isSuccessful()){
+                                                if (task.isSuccessful()) {
                                                     Snackbar.make(view, "Password berhasil diubah", BaseTransientBottomBar.LENGTH_SHORT).show();
                                                 } else {
                                                     Snackbar.make(view, "Password gagal diubah", BaseTransientBottomBar.LENGTH_SHORT).show();
@@ -134,11 +134,11 @@ public class SettingAccount extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         final String ganti_email = et_changeLayout.getText().toString();
-                        if (ganti_email.isEmpty()){
+                        if (ganti_email.isEmpty()) {
                             Snackbar.make(view, "Email tidak boleh kosong", BaseTransientBottomBar.LENGTH_SHORT).show();
-                        } else if (!Patterns.EMAIL_ADDRESS.matcher(ganti_email).matches()){
+                        } else if (!Patterns.EMAIL_ADDRESS.matcher(ganti_email).matches()) {
                             Snackbar.make(view, "Email tidak sesuai!", BaseTransientBottomBar.LENGTH_SHORT).show();
-                        } else if (ganti_email.equals(fUser.getEmail())){
+                        } else if (ganti_email.equals(fUser.getEmail())) {
                             Snackbar.make(view, "Email tidak boleh sama", BaseTransientBottomBar.LENGTH_SHORT).show();
                         } else {
                             ProgressDialog progressDialog = new ProgressDialog(SettingAccount.this);
@@ -147,7 +147,7 @@ public class SettingAccount extends AppCompatActivity {
                             fUser.updateEmail(ganti_email).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()){
+                                    if (task.isSuccessful()) {
                                         Snackbar.make(view, "Berhasil ganti email", BaseTransientBottomBar.LENGTH_SHORT).show();
                                     } else {
                                         Snackbar.make(view, "Email telah digunakan", BaseTransientBottomBar.LENGTH_SHORT).show();
@@ -166,15 +166,15 @@ public class SettingAccount extends AppCompatActivity {
                 builder.create().show();
             }
         });
-
     }
-
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int back =item.getItemId();
+    public boolean onOptionsItemSelected (@NonNull MenuItem item){
+        int back = item.getItemId();
         if (back == android.R.id.home) {
             finish();
         }
         return super.onOptionsItemSelected(item);
     }
 }
+
+

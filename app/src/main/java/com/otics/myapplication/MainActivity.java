@@ -116,17 +116,16 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        switch (requestCode){
-            case REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] + grantResults[1] + grantResults[2]
-                        == PackageManager.PERMISSION_GRANTED){
-                    Toast.makeText(MainActivity.this, "Permintaan izin disetujui", Toast.LENGTH_SHORT).show();
+        if (requestCode == REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] + grantResults[1] + grantResults[2]
+                    == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(MainActivity.this, "Permintaan izin disetujui", Toast.LENGTH_SHORT).show();
 //                    Snackbar.make(MainActivity.this, "Permintaan izin disetujui", BaseTransientBottomBar.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivity.this, "Permintaan izin ditolak", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MainActivity.this, "Permintaan izin ditolak", Toast.LENGTH_SHORT).show();
 
 //                    Snackbar.make(getApplicationContext(), "Permintaan izin disetujui",BaseTransientBottomBar.LENGTH_SHORT).show();
-                }
+            }
         }
     }
 }

@@ -33,9 +33,33 @@
         <entry key="..\:/Users/candr/AndroidStudioProjects/PG-32/app/src/main/res/layout/preview_images.xml" value="0.1" />
         <entry key="..\:/Users/candr/AndroidStudioProjects/PG-32/app/src/main/res/menu/navigasi.xml" value="0.17916666666666667" />
         <entry key="..\:/Users/candr/AndroidStudioProjects/PG-32/app/src/main/res/xml/month_year_picker_dialog.xml" value="0.1743659420289855" />
-        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/layout/activity_kelola_data.xml" value="0.18432971014492755" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/drawable/bg_btn_secondary.xml" value="0.1" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/drawable/bg_foto_profil.xml" value="0.1" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.1" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/drawable/ic_launcher_pg32_background.xml" value="0.1" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/layout/activity_get_started.xml" value="0.12409420289855072" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/layout/activity_jadwal_sholat.xml" value="0.21" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/layout/activity_kelola_data.xml" value="0.2" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/layout/activity_login.xml" value="0.1" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/layout/activity_main.xml" value="0.13" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/layout/activity_preview_image_users.xml" value="0.12409420289855072" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/layout/activity_register.xml" value="0.12409420289855072" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/layout/activity_setting_account.xml" value="0.33" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/layout/activity_splash_screen.xml" value="0.15670289855072464" />
         <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/layout/fragment_beranda.xml" value="0.1" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/layout/fragment_profil.xml" value="0.1" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/layout/item_history.xml" value="0.12409420289855072" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/layout/layout_change_et.xml" value="0.25" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/layout/layout_change_password.xml" value="0.12409420289855072" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/layout/preview_image.xml" value="0.2" />
         <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/menu/navigasi.xml" value="0.11944444444444445" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/mipmap-anydpi-v26/ic_launcher123.xml" value="0.1" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/mipmap-anydpi-v26/ic_launcher123_round.xml" value="0.1" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/mipmap-anydpi-v26/ic_launcher_pg32.xml" value="0.1" />
+        <entry key="..\:/Users/candr/StudioProjects/PG.32/app/src/main/res/mipmap-anydpi-v26/ic_launcher_pg32_round.xml" value="0.1" />
       </map>
     </option>
   </component>

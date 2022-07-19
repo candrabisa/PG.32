@@ -8,11 +8,11 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="60dp">
+        android:layout_height="wrap_content">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:paddingBottom="60dp">
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
@@ -106,8 +106,8 @@
                         android:textSize="14sp"
                         android:text="Pencatatan"/>
                 </LinearLayout>
-                <Space
-                    android:layout_width="wrap_content"
+                <androidx.legacy.widget.Space
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"/>
                 <LinearLayout
@@ -127,7 +127,7 @@
                         android:textSize="14sp"
                         android:text="Kelola Data"/>
                 </LinearLayout>
-                <Space
+                <androidx.legacy.widget.Space
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"/>

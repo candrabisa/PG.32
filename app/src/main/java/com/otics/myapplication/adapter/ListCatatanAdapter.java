@@ -9,10 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.otics.myapplication.Pencatatan;
 import com.otics.myapplication.R;
 import com.otics.myapplication.model.ListCatatanModel;
@@ -39,6 +43,7 @@ public class ListCatatanAdapter extends RecyclerView.Adapter<ListCatatanAdapter.
     @Override
     public void onBindViewHolder(@NonNull ListCatatanAdapter.MyHolder holder, @SuppressLint("RecyclerView") int position) {
 
+        final String id_transaksi = listCatatanModels.get(position).getId_transaksi();
         final String tgl_catat =listCatatanModels.get(position).getTgl_pencatatan();
         final String nomc = listCatatanModels.get(position).getNo_mesin();
         final String jenis_tools = listCatatanModels.get(position).getJenis_tools();
@@ -65,25 +70,59 @@ public class ListCatatanAdapter extends RecyclerView.Adapter<ListCatatanAdapter.
             @Override
             public void onClick(View view) {
                 tekan = position;
-                String pilihan[] = {"Hapus Data", "Edit Data"};
+                notifyDataSetChanged();
+                String[] pilihan = {"Hapus Data", "Edit Data"};
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setMessage("Choose Action");
+                builder.setTitle("Choose Action");
                 builder.setItems(pilihan, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (i == 0){
-
+                            AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+                            builder1.setTitle("Hapus data");
+                            builder1.setMessage("Apakah anda yakin ingin menghapus data?");
+                            builder1.setPositiveButton("Hapus Data", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    DatabaseReference dRef = FirebaseDatabase.getInstance("https://pg-32-5fe27-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                                            .getReference("Pencatatan").child(id_transaksi);
+                                    dRef.removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Toast.makeText(context, "Data berhasil dihapus", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            });
+                            builder1.setNegativeButton("Batal", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                }
+                            });
+                            builder1.create().show();
                         } else {
-//                            Intent intent = new Intent(context, Pencatatan.class);
-//                            intent.putExtra("tgl_catat", tgl_catat);
-//                            intent.putExtra("nomc", nomc);
-//                            intent.putExtra("jenis_tool", jenis_tools);
-//                            intent.putExtra("waktu_owa", waktu_owa);
-//                            intent.putExtra("status_owa", status_owa);
-//                            intent.putExtra("")
+//                            ListCatatanModel catatanModel = new ListCatatanModel(id_transaksi, tgl_catat, nomc,
+//                                    jenis_tools, waktu_owa, status_owa, waktu_hatsu, status_hatsu,
+//                                    jumlah_counter, alasan, pic);
+
+                            Intent intent = new Intent(context, Pencatatan.class);
+                            intent.putExtra("id_transaksi", id_transaksi);
+                            intent.putExtra("tgl_catat", tgl_catat);
+                            intent.putExtra("nomc", nomc);
+                            intent.putExtra("jenis_tools", jenis_tools);
+                            intent.putExtra("waktu_owa", waktu_owa);
+                            intent.putExtra("status_owa", status_owa);
+                            intent.putExtra("waktu_hatsu", waktu_hatsu);
+                            intent.putExtra("status_hatsu", status_hatsu);
+                            intent.putExtra("jumlah_count", jumlah_counter);
+                            intent.putExtra("alasan", alasan);
+                            intent.putExtra("pic", pic);
+                            context.startActivity(intent);
                         }
                     }
                 });
+                builder.create().show();
             }
         });
 

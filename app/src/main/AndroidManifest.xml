@@ -8,6 +8,13 @@
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true"/>
+    <uses-feature android:name="android.hardware.location"
+        android:required="true"/>
+    <uses-feature android:name="android.hardware.location.gps"/>
 
     <application
         android:allowBackup="true"
@@ -18,27 +25,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PG32">
         <activity
+            android:name=".JadwalSholat"
+            android:exported="true"
+            android:theme="@style/Theme.PG32A"/>
+        <activity
             android:name=".KelolaData"
             android:exported="true"
-            android:screenOrientation="nosensor"
-            />
+            android:screenOrientation="nosensor" />
         <activity
             android:name=".Pencatatan"
             android:exported="true"
-            android:screenOrientation="nosensor"
-            />
+            android:screenOrientation="nosensor" />
         <activity
             android:name=".SettingAccount"
             android:exported="true"
-            android:theme="@style/Theme.PG32A"
             android:screenOrientation="nosensor"
-            />
+            android:theme="@style/Theme.PG32A" />
         <activity
             android:name=".ForgotPassword"
             android:exported="true"
-            android:theme="@style/Theme.PG32A"
             android:screenOrientation="nosensor"
-            />
+            android:theme="@style/Theme.PG32A" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -53,29 +60,24 @@
         <activity
             android:name=".PreviewImages"
             android:exported="true"
-            android:theme="@style/Theme.PG32PreviewImage"
             android:screenOrientation="nosensor"
-            />
+            android:theme="@style/Theme.PG32PreviewImage" />
         <activity
             android:name=".Register"
             android:exported="true"
-            android:screenOrientation="nosensor"
-            />
+            android:screenOrientation="nosensor" />
         <activity
             android:name=".Login"
             android:exported="true"
-            android:screenOrientation="nosensor"
-            />
+            android:screenOrientation="nosensor" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:screenOrientation="nosensor"
-            />
+            android:screenOrientation="nosensor" />
         <activity
             android:name=".GetStarted"
             android:exported="true"
-            android:screenOrientation="nosensor"
-            />
+            android:screenOrientation="nosensor" />
         <activity
             android:name=".SplashScreen"
             android:exported="true"

@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -83,7 +84,7 @@ public class KelolaData extends AppCompatActivity implements AdapterView.OnItemS
 
     ProgressDialog progressDialog;
     AlertDialog.Builder builder;
-    View parentLayout;
+
     static final int REQUEST_CODE = 100;
 
     String nama;
@@ -111,7 +112,6 @@ public class KelolaData extends AppCompatActivity implements AdapterView.OnItemS
 
         sp_historyCatatan = findViewById(R.id.sp_historyCatatan);
         sp_historyCatatan.setOnItemSelectedListener(this);
-        parentLayout = findViewById(R.id.content);
 
         et_cariPakeTanggal = findViewById(R.id.et_cariPakeTanggal);
         et_cariPakeBulan = findViewById(R.id.et_cariPakeBulan);
@@ -139,6 +139,7 @@ public class KelolaData extends AppCompatActivity implements AdapterView.OnItemS
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.cancel();
                                 constraint_history.setVisibility(View.GONE);
+                                finish();
                             }
                         });
                         builder.create().show();
@@ -148,6 +149,7 @@ public class KelolaData extends AppCompatActivity implements AdapterView.OnItemS
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.cancel();
                                 constraint_history.setVisibility(View.GONE);
+                                finish();
                             }
                         });
                         builder.create().show();
@@ -157,6 +159,7 @@ public class KelolaData extends AppCompatActivity implements AdapterView.OnItemS
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.cancel();
                                 constraint_history.setVisibility(View.GONE);
+                                finish();
                             }
                         });
                         builder.create().show();
@@ -176,6 +179,7 @@ public class KelolaData extends AppCompatActivity implements AdapterView.OnItemS
         btn_cetakKanriban.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                checkPermission();
                 cetakLaporan();
             }
         });
@@ -183,6 +187,7 @@ public class KelolaData extends AppCompatActivity implements AdapterView.OnItemS
         btn_bagikanKanriban.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                checkPermission();
                 recyclerToExcelReport();
 
             }
@@ -301,7 +306,6 @@ public class KelolaData extends AppCompatActivity implements AdapterView.OnItemS
                 }
                 adapter = new ListCatatanAdapter(KelolaData.this, listCatatanModels);
                 if (listCatatanModels.isEmpty()){
-                    Snackbar.make(parentLayout, "Data History Kosong", BaseTransientBottomBar.LENGTH_SHORT).show();
                     constraint_history.setVisibility(View.GONE);
                 } else {
                     constraint_history.setVisibility(View.VISIBLE);
@@ -522,9 +526,8 @@ public class KelolaData extends AppCompatActivity implements AdapterView.OnItemS
                 }
             });
 
-
         } else {
-            loadDataPencatatan();
+            filterDataHistoryPerhari(tahun);
             constraint_filterTahun.setVisibility(View.VISIBLE);
             constraint_filterBulan.setVisibility(View.GONE);
             rl_filterTglHistory.setVisibility(View.GONE);
@@ -589,7 +592,7 @@ public class KelolaData extends AppCompatActivity implements AdapterView.OnItemS
                 }, REQUEST_CODE);
             }
         } else {
-            Snackbar.make(parentLayout, "Permintaan izin telah disetujui", BaseTransientBottomBar.LENGTH_SHORT).show();
+            Toast.makeText(KelolaData.this, "Permintaan izin telah disetujui", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -599,7 +602,7 @@ public class KelolaData extends AppCompatActivity implements AdapterView.OnItemS
 
         switch (requestCode){
             case REQUEST_CODE:
-                Snackbar.make(parentLayout, "Permintaan izin disetujui", BaseTransientBottomBar.LENGTH_SHORT).show();
+                Toast.makeText(KelolaData.this, "Permintaan iziz disetujui", Toast.LENGTH_SHORT).show();
         }
     }
 }
